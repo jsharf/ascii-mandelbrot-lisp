@@ -1,0 +1,30 @@
+(setf iterations 1000)
+
+(defmacro mandelbrot (c)
+  `(mandelbrot-helper 0 ,c iterations)
+)
+
+(defun mandelbrot-helper (z c iter-depth)
+  (if (> iter-depth 0)
+    (if (< (abs z) 2)
+      (mandelbrot-helper (+ (* z z) c) c (- iter-depth 1))
+      nil
+      )
+    t
+    )
+)
+
+(let ((list-x) (list-y)) 
+  (dotimes (a 100)
+    (setf list-x (cons (- 1 (* a (/ 3.5 100))) list-x))
+    (if (< a 50)
+        (setf list-y (cons (- 1 (* a (/ 2 50))) list-y))
+    )
+  )
+  (dolist (i list-y)
+    (dolist (r list-x)
+      (if (mandelbrot (complex r i)) (format t "*") (format t " "))
+    )
+    (format t "~%")
+  )
+)
